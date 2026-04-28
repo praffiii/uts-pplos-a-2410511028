@@ -118,3 +118,24 @@ exports.logout = async (req, res) => {
   await RefreshToken.revoke(refresh_token);
   return res.status(200).json({ message: 'Logged out successfully' });
 };
+
+exports.googleCallback = async (req, res) => {
+  const user = req.user;
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+  await RefreshToken.create(user.id, refreshToken, getRefreshTokenExpiry());
+
+  return res.status(200).json({
+    message: 'Google OAuth login successful',
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      oauth_provider: 'google',
+      avatar_url: user.avatar_url,
+    },
+  });
+};
