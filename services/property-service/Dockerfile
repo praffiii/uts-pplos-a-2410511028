@@ -17,6 +17,10 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 COPY . .
 
+RUN mkdir -p /var/www/html/bootstrap/cache /var/www/html/storage/logs \
+    && chmod -R 777 /var/www/html/bootstrap/cache \
+    && chmod -R 777 /var/www/html/storage
+
 EXPOSE 8000
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
