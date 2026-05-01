@@ -15,10 +15,11 @@ services:
     networks:
       - kos-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
 
   auth-service:
     build:
@@ -52,13 +53,21 @@ services:
     container_name: kos-property-service
     restart: unless-stopped
     environment:
-      APP_PORT: 8000
+      APP_NAME: PropertyService
+      APP_ENV: production
+      APP_KEY: ${PROPERTY_APP_KEY}
+      APP_DEBUG: false
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: mysql
       DB_HOST: mysql
       DB_PORT: 3306
       DB_DATABASE: property_db
       DB_USERNAME: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: sync
     depends_on:
       mysql:
         condition: service_healthy
