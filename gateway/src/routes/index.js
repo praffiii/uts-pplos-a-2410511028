@@ -11,6 +11,9 @@ const propertiesProxy = createProxyMiddleware({
   changeOrigin: true,
   pathFilter: '/properties',
   pathRewrite: { '^/properties': '/api/properties' },
+  on: {
+    proxyReq: (proxyReq) => { proxyReq.setHeader('Accept', 'application/json'); },
+  },
 });
 
 const roomsProxy = createProxyMiddleware({
@@ -18,6 +21,19 @@ const roomsProxy = createProxyMiddleware({
   changeOrigin: true,
   pathFilter: '/rooms',
   pathRewrite: { '^/rooms': '/api/rooms' },
+  on: {
+    proxyReq: (proxyReq) => { proxyReq.setHeader('Accept', 'application/json'); },
+  },
+});
+
+const ownersProxy = createProxyMiddleware({
+  target: process.env.PROPERTY_SERVICE_URL,
+  changeOrigin: true,
+  pathFilter: '/owners',
+  pathRewrite: { '^/owners': '/api/owners' },
+  on: {
+    proxyReq: (proxyReq) => { proxyReq.setHeader('Accept', 'application/json'); },
+  },
 });
 
 const bookingsProxy = createProxyMiddleware({
@@ -36,6 +52,7 @@ const setupRoutes = (app) => {
   app.use(authProxy);
   app.use(propertiesProxy);
   app.use(roomsProxy);
+  app.use(ownersProxy);
   app.use(bookingsProxy);
   app.use(paymentsProxy);
 };
