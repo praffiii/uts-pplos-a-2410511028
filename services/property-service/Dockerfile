@@ -17,8 +17,9 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 COPY . .
 
-RUN php artisan config:cache \
-    && php artisan route:cache
+RUN mkdir -p /var/www/html/bootstrap/cache /var/www/html/storage/logs \
+    && chmod -R 777 /var/www/html/bootstrap/cache \
+    && chmod -R 777 /var/www/html/storage
 
 EXPOSE 8000
 
