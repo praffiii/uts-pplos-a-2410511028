@@ -10,16 +10,18 @@ const Booking = {
   },
 
   async findAll({ user_id, page = 1, per_page = 10 }) {
-    const offset = (page - 1) * per_page;
+    const pageInt = parseInt(page, 10);
+    const perPageInt = parseInt(per_page, 10);
+    const offset = (pageInt - 1) * perPageInt;
     const [rows] = await pool.execute(
-      'SELECT * FROM bookings WHERE tenant_user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [user_id, Number(per_page), Number(offset)]
+      `SELECT * FROM bookings WHERE tenant_user_id = ? ORDER BY created_at DESC LIMIT ${perPageInt} OFFSET ${offset}`,
+      [user_id]
     );
     const [[{ total }]] = await pool.execute(
       'SELECT COUNT(*) as total FROM bookings WHERE tenant_user_id = ?',
       [user_id]
     );
-    return { data: rows, total, page: Number(page), per_page: Number(per_page) };
+    return { data: rows, total, page: pageInt, per_page: perPageInt };
   },
 
   async findById(id) {
