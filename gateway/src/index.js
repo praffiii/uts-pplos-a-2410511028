@@ -5,7 +5,6 @@ const authMiddleware = require('./middlewares/auth');
 const setupRoutes = require('./routes/index');
 
 const app = express();
-app.use(express.json());
 
 app.use(rateLimiter);
 app.use(authMiddleware);

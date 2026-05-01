@@ -9,7 +9,9 @@ class OwnerController extends Controller
 {
     public function store(StoreOwnerRequest $request)
     {
-        $owner = Owner::create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = $request->auth_user['id'];
+        $owner = Owner::create($data);
         return response()->json(['message' => 'Owner created', 'data' => $owner], 201);
     }
 

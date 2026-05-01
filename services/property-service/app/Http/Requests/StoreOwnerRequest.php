@@ -17,7 +17,6 @@ class StoreOwnerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'      => 'required|integer',
             'name'         => 'required|string|max:255',
             'phone'        => 'required|string|max:20',
             'bank_account' => 'nullable|string|max:255',
