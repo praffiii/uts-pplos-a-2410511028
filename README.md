@@ -9,11 +9,11 @@ Sistem berbasis Service-Oriented Architecture (SOA) untuk manajemen properti kos
 | Nama | Praffi Ramadhani |
 | NIM | 2410511028 |
 | Kelas | A |
-| Mata Kuliah | Pembangunan Perangkat Lunak Berorientasi Servis |
+| Mata Kuliah | Pembangunan Perangkat Lunak Berorientasi Service |
 
 ## Demo Video
 
-[Demo Video](TBA)
+[Demo Video](https://youtu.be/5-XdyFYUMw4?si=Gm80O31asbXv4tt_)
 
 ## Arsitektur
 
@@ -60,9 +60,12 @@ Semua service terhubung ke MySQL dengan database terpisah:
 git clone https://github.com/praffiii/uts-pplos-a-2410511028.git
 cd uts-pplos-a-2410511028
 
-# 2. Buat file .env dari template
-cp .env.example .env
-# Edit .env dan isi nilai yang diperlukan
+# 2. Buat file .env dari template di setiap service
+cp gateway/.env.example gateway/.env
+cp services/auth-service/.env.example services/auth-service/.env
+cp services/property-service/.env.example services/property-service/.env
+cp services/booking-service/.env.example services/booking-service/.env
+# Edit masing-masing .env dan isi nilai yang diperlukan
 
 # 3. Jalankan semua service
 docker-compose up --build
@@ -87,6 +90,13 @@ Semua endpoint diakses melalui `http://localhost:3000`.
 | GET | `/auth/google` | Login via Google OAuth | — |
 | GET | `/auth/google/callback` | Callback Google OAuth | — |
 | GET | `/auth/profile` | Data profil user | ✓ |
+
+### Pemilik (`/owners`)
+| Method | Endpoint | Keterangan | Auth |
+|---|---|---|---|
+| POST | `/owners` | Tambah pemilik kos | ✓ |
+| GET | `/owners/:id` | Detail pemilik beserta propertinya | ✓ |
+| PUT | `/owners/:id` | Update data pemilik | ✓ |
 
 ### Properti (`/properties`, `/rooms`)
 | Method | Endpoint | Keterangan | Auth |
@@ -120,18 +130,15 @@ Semua endpoint diakses melalui `http://localhost:3000`.
 uts-pplos-a-2410511028/
 ├── README.md
 ├── docker-compose.yml
-├── .env.example
 ├── gateway/               # API Gateway (Node.js)
 ├── services/
 │   ├── auth-service/      # JWT + Google OAuth (Node.js)
 │   ├── property-service/  # Listing properti (PHP Laravel 11)
 │   └── booking-service/   # Booking & pembayaran (Node.js)
 ├── docs/
-│   ├── laporan-uts.pdf
-│   └── arsitektur.png
-├── postman/
-│   └── collection.json
-└── poster/
-    ├── poster-uts.pdf
-    └── poster-uts.png
+│   ├── 2410511028-PraffiRamadhani-IFA-Service-UTS.pdf
+│   └── diagram-arsitektur.png
+└── postman/
+    ├── uts-pplos-a-2410511028.postman_collection.json
+    └── *.png               # Screenshot setiap endpoint
 ```
